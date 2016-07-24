@@ -1,5 +1,7 @@
 package com.bignerdranch.android.criminalintent;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -20,6 +22,8 @@ public class CrimeListFragment extends Fragment {
 
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mCrimeAdapter;
+
+    private static final int REQUEST_CRIME = 1;
 
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTitleTextView;
@@ -35,6 +39,13 @@ public class CrimeListFragment extends Fragment {
             mSolvedCheckbox = (CheckBox) itemView.findViewById(R.id.list_item_crime_solved_checkbox);
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_crime_title);
             mDateTextView = (TextView) itemView.findViewById(R.id.list_item_crime_date);
+
+            mSolvedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    mCrime.setSolved(b);
+                }
+            });
         }
 
         public void bindCrime(Crime crime) {
@@ -46,7 +57,8 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(getActivity(), mCrime.getTitle() + " clicked!", Toast.LENGTH_SHORT).show();
+            Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getID());
+            startActivityForResult(intent, REQUEST_CRIME);
         }
     }
 
@@ -93,11 +105,32 @@ public class CrimeListFragment extends Fragment {
         return view;
     }
 
-    private void updateUI() {
-        CrimeLab crimeLab = CrimeLab.get();
-        List<Crime> crimes = crimeLab.getCrimes();
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
 
-        mCrimeAdapter = new CrimeAdapter(crimes);
-        mCrimeRecyclerView.setAdapter(mCrimeAdapter);
+    private void updateUI() {
+        if (mCrimeAdapter == null) {
+            CrimeLab crimeLab = CrimeLab.get();
+            List<Crime> crimes = crimeLab.getCrimes();
+
+            mCrimeAdapter = new CrimeAdapter(crimes);
+            mCrimeRecyclerView.setAdapter(mCrimeAdapter);
+        } else {
+            mCrimeAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == REQUEST_CRIME) {
+            // handle something
+        }
     }
 }
