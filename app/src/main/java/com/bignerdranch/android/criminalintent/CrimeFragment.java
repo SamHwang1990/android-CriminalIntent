@@ -1,6 +1,7 @@
 package com.bignerdranch.android.criminalintent;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -21,6 +22,7 @@ import java.util.UUID;
 public class CrimeFragment extends Fragment {
 
     private static String ARG_CRIME_ID = "crime_id";
+    private static String EXTRA_CRIME_ID = "com.bignerdranch.android.criminalintent.crime_id";
 
     private Crime mCrime;
     private EditText mTextField;
@@ -55,7 +57,6 @@ public class CrimeFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
 
@@ -72,11 +73,19 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+        returnResult();
+
         return v;
     }
 
-    public void returnResult() {
-        getActivity().setResult(Activity.RESULT_OK, null);
+    private void returnResult() {
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_CRIME_ID, mCrime.getID());
+        getActivity().setResult(Activity.RESULT_OK, intent);
+    }
+
+    public static UUID getCrimeID(Intent intent) {
+        return (UUID) intent.getSerializableExtra(EXTRA_CRIME_ID);
     }
 
 

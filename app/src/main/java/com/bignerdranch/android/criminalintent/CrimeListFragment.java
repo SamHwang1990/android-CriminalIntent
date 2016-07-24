@@ -3,6 +3,7 @@ package com.bignerdranch.android.criminalintent;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by sam on 16/7/23.
@@ -86,6 +88,16 @@ public class CrimeListFragment extends Fragment {
         public int getItemCount() {
             return mCrimes.size();
         }
+
+        public void notifyItemChangedByCrimeId(UUID crimeId) {
+            for (int i = 0; i < mCrimes.size(); ++i) {
+                Crime crime = mCrimes.get(i);
+                if (crime.getID().equals(crimeId)) {
+                    notifyItemChanged(i);
+                    return;
+                }
+            }
+        }
     }
 
     @Override
@@ -105,12 +117,6 @@ public class CrimeListFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateUI();
-    }
-
     private void updateUI() {
         if (mCrimeAdapter == null) {
             CrimeLab crimeLab = CrimeLab.get();
@@ -123,6 +129,10 @@ public class CrimeListFragment extends Fragment {
         }
     }
 
+    private void updateUI(UUID crimeId) {
+        mCrimeAdapter.notifyItemChangedByCrimeId(crimeId);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) {
@@ -130,7 +140,8 @@ public class CrimeListFragment extends Fragment {
         }
 
         if (requestCode == REQUEST_CRIME) {
-            // handle something
+            UUID crimeId = CrimeFragment.getCrimeID(data);
+            updateUI(crimeId);
         }
     }
 }
