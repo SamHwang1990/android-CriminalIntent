@@ -16,6 +16,8 @@ public class Crime {
     public Crime() {
         mID = UUID.randomUUID();
         mDate = new Date();
+        mTitle = "";
+        mSolved = false;
     }
 
     public UUID getID() {

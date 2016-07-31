@@ -2,13 +2,13 @@ package com.bignerdranch.android.criminalintent;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by sam on 16/7/23.
  */
-public abstract class SimpleFragmentActivity extends FragmentActivity {
+public abstract class SimpleFragmentActivity extends AppCompatActivity {
 
     protected abstract Fragment createFragment();
 
