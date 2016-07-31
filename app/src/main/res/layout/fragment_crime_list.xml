@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-                                        android:id="@+id/crime_list_view"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent">
-</android.support.v7.widget.RecyclerView>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+    <LinearLayout
+        android:id="@+id/crime_list_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_crime_list"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            style="?android:listSeparatorTextViewStyle"/>
+
+        <Button
+            android:id="@+id/crime_list_new_crime"
+            android:text="@string/new_crime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"/>
+
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+                                            android:id="@+id/crime_list_view"
+                                            android:visibility="invisible"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+</RelativeLayout>
