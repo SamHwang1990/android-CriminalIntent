@@ -25,11 +25,14 @@ public class CrimeFragment extends Fragment {
 
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String TAG_DIALOG_DATE = "DialogDate";
+    private static final String TAG_DIALOG_TIME = "DialogTime";
     private static final int REQUEST_DATE = 0;
+    private static final int REQUEST_TIME = 1;
 
     private Crime mCrime;
     private EditText mTextField;
     private Button mDateButton;
+    private Button mTimeButton;
     private CheckBox mSolvedCheckbox;
 
     @Override
@@ -77,6 +80,18 @@ public class CrimeFragment extends Fragment {
 
         });
 
+        mTimeButton = (Button) v.findViewById(R.id.crime_time);
+        mTimeButton.setText(mCrime.getTimeFormatted());
+        mTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getFragmentManager();
+                TimePickerFragment dialog = TimePickerFragment.newInstance(mCrime.getDate());
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_TIME);
+                dialog.show(fm, TAG_DIALOG_TIME);
+            }
+        });
+
         mSolvedCheckbox = (CheckBox) v.findViewById(R.id.crime_solved);
         mSolvedCheckbox.setChecked(mCrime.getSolved());
         mSolvedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -104,10 +119,20 @@ public class CrimeFragment extends Fragment {
             mCrime.setDate(date);
             updateDateButtonText();
         }
+
+        if (requestCode == REQUEST_TIME) {
+            Date date = TimePickerFragment.getDate(data);
+            mCrime.setDate(date);
+            updateTimeButtonText();
+        }
     }
 
     private void updateDateButtonText() {
         mDateButton.setText(mCrime.getDateFormatted());
+    }
+
+    private void updateTimeButtonText() {
+        mTimeButton.setText(mCrime.getTimeFormatted());
     }
 
     public static CrimeFragment newInstance(UUID crimeId) {

@@ -49,4 +49,8 @@ public class Crime {
     public String getDateFormatted() {
         return DateFormat.format("EEEE, MMM dd, yyyy", this.getDate()).toString();
     }
+
+    public String getTimeFormatted() {
+        return DateFormat.format("HH:mm:ss", this.getDate()).toString();
+    }
 }
