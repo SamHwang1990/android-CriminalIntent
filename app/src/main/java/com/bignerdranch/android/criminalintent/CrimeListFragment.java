@@ -93,6 +93,10 @@ public class CrimeListFragment extends Fragment {
         public int getItemCount() {
             return mCrimes.size();
         }
+
+        public void setCrimes(List<Crime> crimes) {
+            mCrimes = crimes;
+        }
     }
 
     @Override
@@ -138,13 +142,14 @@ public class CrimeListFragment extends Fragment {
     }
 
     private void updateUI() {
-        if (mCrimeAdapter == null) {
-            CrimeLab crimeLab = CrimeLab.get();
-            List<Crime> crimes = crimeLab.getCrimes();
+        CrimeLab crimeLab = CrimeLab.get(getActivity());
+        List<Crime> crimes = crimeLab.getCrimes();
 
+        if (mCrimeAdapter == null) {
             mCrimeAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mCrimeAdapter);
         } else {
+            mCrimeAdapter.setCrimes(crimes);
             mCrimeAdapter.notifyDataSetChanged();
         }
         updateSubtitle();
@@ -155,7 +160,7 @@ public class CrimeListFragment extends Fragment {
         if (!mSubtitleVisible) {
             subtitle = null;
         } else {
-            CrimeLab crimeLab = CrimeLab.get();
+            CrimeLab crimeLab = CrimeLab.get(getActivity());
             int crimeCount = crimeLab.getCrimes().size();
             subtitle = getString(R.string.subtitle_format, crimeCount);
         }
@@ -180,7 +185,7 @@ public class CrimeListFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.menu_item_new_crime:
                 Crime c = new Crime();
-                CrimeLab.get().addCrime(c);
+                CrimeLab.get(getActivity()).addCrime(c);
                 Intent intent = CrimePagerActivity.newIntent(getActivity(), c.getID());
                 startActivity(intent);
                 return true;
