@@ -12,6 +12,7 @@ public class Crime {
     private String mTitle;
     private Date mDate;
     private Boolean mSolved;
+    private String mSuspect;
 
     public Crime() {
         this(UUID.randomUUID());
@@ -54,5 +55,13 @@ public class Crime {
 
     public String getDateFormatted() {
         return DateFormat.format("EEEE, MMM dd, yyyy", this.getDate()).toString();
+    }
+
+    public String getSuspect() {
+        return mSuspect;
+    }
+
+    public void setSuspect(String suspect) {
+        mSuspect = suspect;
     }
 }
