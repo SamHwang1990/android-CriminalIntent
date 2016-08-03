@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 
 import com.bignerdranch.android.criminalintent.database.CrimeDbSchema.CrimeBaseHelper;
@@ -11,6 +12,7 @@ import com.bignerdranch.android.criminalintent.database.CrimeDbSchema.CrimeCurso
 import com.bignerdranch.android.criminalintent.database.CrimeDbSchema.CrimeDbSchema;
 import com.bignerdranch.android.criminalintent.database.CrimeDbSchema.CrimeDbSchema.CrimeTable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -65,6 +67,16 @@ public class CrimeLab {
         } finally {
             cursor.close();
         }
+    }
+
+    public File getPhotoFile(Crime c) {
+        File externalFilesDir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        if (externalFilesDir == null) {
+            return null;
+        }
+
+        return new File(externalFilesDir, c.getPhotoFileName());
     }
 
     public void addCrime(Crime c) {
